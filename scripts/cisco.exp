@@ -1,0 +1,35 @@
+#!/usr/bin/expect -f
+set user_sw "user";
+set pass_sw "pass";
+
+set user_ftp "ftpuser";
+set pass_ftp "ftppass";
+set host_ftp "ftphost";
+
+set force_conservative 1
+
+if {$force_conservative} {
+        set send_slow {1 .001}
+        proc send {ignore arg} {
+                sleep .1
+                        exp_send -s -- $arg
+        }
+}
+spawn telnet [lindex $argv 0] 
+expect "Username:*"
+send -- "$user_sw\r"
+expect "Password:*"
+send -- "$pass_sw\r"
+send -- "copy startup-config ftp://$user_ftp:$pass_ftp@$host_ftp/[lindex $argv 0]_[lindex $argv 1]-startup-config.txt\r"
+send -- "\r"
+send -- "\r"
+#send -- "copy flash:vlan.dat ftp://$user_ftp:$pass_ftp@$host_ftp/[lindex $argv 0]_[lindex $argv 1]-vlan.dat\r"
+expect "Address*"
+send -- "\r"
+expect "Destination*"
+send -- "\r"
+send_user "\nBackup'eado!\n"
+send -- "\r"
+send -- "\r"
+send -- "exit\r"
+exit

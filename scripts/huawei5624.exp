@@ -1,0 +1,36 @@
+#!/usr/bin/expect -f
+set password_generico "pass";
+
+set pass_sw "pass";
+
+set user_ftp "ftpuser";
+set pass_ftp "ftppass";
+set host_ftp "ftphost";
+
+set force_conservative 1
+if {$force_conservative} {
+        set send_slow {1 .001}
+        proc send {ignore arg} {
+                sleep .1
+                        exp_send -s -- $arg
+        }
+}
+spawn telnet [lindex $argv 0] 
+expect "Password:*"
+send -- "$password_generico\r"
+send -- "super\r"
+expect "Password:*"
+send -- "$pass_sw\r"
+send -- "ftp $host_ftp \r"
+#expect "*:"
+send -- "$user_ftp\r"
+#expect "*:"
+send -- "$pass_ftp\r"
+#expect "]"
+send -- "put unit1>flash:/vrpcfg.cfg [lindex $argv 0]_[lindex $argv 1].cfg\r"
+send -- "put unit2>flash:/vrpcfg.cfg [lindex $argv 0]_[lindex $argv 1].cfg\r"
+send -- "put unit3>flash:/vrpcfg.cfg [lindex $argv 0]_[lindex $argv 1].cfg\r"
+#expect "]"
+send -- "quit\r"
+send -- "q\r"
+exit

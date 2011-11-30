@@ -1,0 +1,6 @@
+Switch backup es un simple script que backupea algunos switches administrables usando expect para conectarse y mandar su archivo de configuracion a un ftp remoto.
+
+En el archivo switchs.list deben especificarse la IP:comunidad de snmp y en los scripts .exp el usuario y contrase~a de los switches como del ftp.
+Quiza deba modificarse los expect en base a la configuracion de cada sw, pero la base esta y solo habria que modificar algunas cosas puntuales.
+
+Los archivos se guardane en el directorio especificado.
